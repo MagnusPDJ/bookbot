@@ -1,33 +1,28 @@
+from stats import word_count
+from stats import get_character_num
+import sys
+
 def main():
-    book_path = "books/frankenstein.txt"
+    if len(sys.argv) != 2:
+        print("Usage: python3 main.py <path_to_book>")
+        sys.exit(1)
+    book_path = sys.argv[1]
     text = get_book_text(book_path)
     num_words = word_count(text)
     num_characters = get_character_num(text)
     list_of_dict = convert_dict_to_list(num_characters)
 
-    print(f"--- Begin report of {book_path} ---")
-    print(f"{num_words} words found in the document")
-    print()
+    print(f"============ BOOKBOT ============")
+    print(f"Analyzing book found at {book_path}...")
+    print(f"----------- Word Count -----------")
+    print(f"Found {num_words} total words")
+    print(f"--------- Character Count -------")
     character_data(list_of_dict)
-    print("--- End report ---")
+    print("============= END ===============")
 
 def get_book_text(path):
     with open(path) as f:
         return f.read()
-
-def word_count(book):
-    words = book.split()
-    return len(words)
-
-def get_character_num(book):
-    num_characters = {}
-    for c in book:
-        lowered = c.lower()
-        if lowered in num_characters:
-            num_characters[lowered] += 1
-        else:
-            num_characters[lowered] = 1
-    return num_characters
 
 def convert_dict_to_list(dict):
     list_of_dict = []
@@ -44,5 +39,6 @@ def character_data(list_of_dict):
     for dict in list_of_dict:
         if not dict["char"].isalpha():
             continue
-        print(f"The '{dict['char']}' character was found {dict['count']} times")
+        print(f"{dict['char']}: {dict['count']}")
+
 main()
